@@ -92,8 +92,9 @@ def _font_face(family, chars):
     buf = io.BytesIO()
     font.save(buf)
     buf.seek(0)
-    clone = TTFont(buf)
+    clone = TTFont(buf, recalcTimestamp=False)
     sub.subset(clone)
+    clone["head"].modified = clone["head"].created  # reproducible output
     clone.flavor = "woff2"
     out = io.BytesIO()
     clone.save(out)
